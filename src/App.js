@@ -1,6 +1,8 @@
-import { Component } from 'react';
+import { Component, React } from 'react';
 import Menu from "./components/Menu";
 import TabelaLivros from "./components/TabelaLivros";
+import NotFound from "./components/NotFound";
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 
 class App extends Component {
   state = {
@@ -27,10 +29,15 @@ class App extends Component {
   }
   render() {
     return (
-      <div className='App'>
-        <Menu />
-        <TabelaLivros livros={this.state.livros} />
-      </div>
+      <Router>
+        <div className='App'>
+          <Menu />
+          <Routes>
+            <Route index element={<TabelaLivros livros={this.state.livros} />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </div>
+      </Router>
     )
   }
 }
