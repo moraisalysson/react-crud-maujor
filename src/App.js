@@ -3,6 +3,7 @@ import Menu from "./components/Menu";
 import TabelaLivros from "./components/TabelaLivros";
 import NotFound from "./components/NotFound";
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import CadastrarLivros from './components/CadastrarLivro';
 
 class App extends Component {
   state = {
@@ -27,6 +28,14 @@ class App extends Component {
       },
     ],
   }
+
+  inserirLivro = livro => {
+    livro.id = this.state.livros.length + 1;
+    this.setState({
+      livros: [ ...this.state.livros, livro ]
+    })
+  };
+
   render() {
     return (
       <Router>
@@ -35,6 +44,15 @@ class App extends Component {
           <Routes>
             <Route index element={<TabelaLivros livros={this.state.livros} />} />
             <Route path="*" element={<NotFound />} />
+            <Route
+              path='/cadastrar'
+              element={
+                <CadastrarLivros
+                  inserirLivro={this.inserirLivro}
+                  livro={{ id: 0, isbn: "", titulo: "", autor: "" }}
+                />
+              }
+            />
           </Routes>
         </div>
       </Router>
