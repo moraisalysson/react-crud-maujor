@@ -2,8 +2,9 @@ import { Component, React } from 'react';
 import Menu from "./components/Menu";
 import TabelaLivros from "./components/TabelaLivros";
 import NotFound from "./components/NotFound";
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { Route, BrowserRouter as Router, Routes} from 'react-router-dom';
 import CadastrarLivros from './components/CadastrarLivro';
+import EditarLivroWrapper from './components/EditarLivroWrapper';
 
 class App extends Component {
   state = {
@@ -36,6 +37,19 @@ class App extends Component {
     })
   };
 
+  editarLivro = livro => {
+    const indice = this.state.livros.findIndex(l => l.id === livro.id)
+    const livros = this.state.livros
+      .slice(0, indice) //remove do array o livro a ser editado
+      .concat(this.state.livros.slice(indice + 1)); //pega todos os elementos após o índice do livro removido e concatena com o array sem o livro (feito no slice)
+
+    const newLivros = [...livros, livro].sort((a, b) => a.id - b.id); //coloca no array livro editado e faz a ordenação
+
+    this.setState({
+      livros: newLivros
+    })
+  };
+
   render() {
     return (
       <Router>
@@ -50,6 +64,13 @@ class App extends Component {
                 <CadastrarLivros
                   inserirLivro={this.inserirLivro}
                   livro={{ id: 0, isbn: "", titulo: "", autor: "" }}
+                />
+            }
+            />
+            <Route
+              path='/editar/:isbn'
+              element={
+                <EditarLivroWrapper editarLivro={this.editarLivro} livros={this.state.livros}
                 />
               }
             />

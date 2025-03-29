@@ -11,11 +11,17 @@ class CadastrarLivros extends Component {
         },
         redirecionar: false
     };
+    
 
     handleLivroForm = e => {
         e.preventDefault();
         
-        this.props.inserirLivro(this.state.livro);
+        if(this.props.editarLivro) {
+            this.props.editarLivro(this.state.livro);
+        }
+        else {
+            this.props.inserirLivro(this.state.livro)
+        }
         this.setState({ redirecionar: true });
     }
 
@@ -26,7 +32,7 @@ class CadastrarLivros extends Component {
 
         return (
             <form onSubmit={this.handleLivroForm}>
-                <h1>Cadastrar livro</h1>
+                <h1>{this.props.editarLivro ? "Editar" : "Cadastrar"} livro</h1>
                 <p>
                     <label htmlFor="fisbn">ISBN: Formato - (<span style={{ color: "red" }}>978-85-7522-xxx-x</span>)
                     </label>
@@ -85,7 +91,7 @@ class CadastrarLivros extends Component {
                 </p>
                 <p>
                     <button type="submit" className="botao cadastrar">
-                        Cadastrar
+                        {this.props.editarLivro ? "Editar": "Cadastrar"}
                     </button>
                 </p>
             </form>
