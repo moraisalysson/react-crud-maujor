@@ -1,14 +1,16 @@
 import { Component, React } from 'react';
 import Header from "./components/Header";
-import TabelaLivros from "./components/TabelaLivros";
+import TabelaLivrosWrapper from "./components/TabelaLivrosWrapper";
 import NotFound from "./components/NotFound";
 import { Route, BrowserRouter as Router, Routes} from 'react-router-dom';
 import CadastrarLivros from './components/CadastrarLivro';
 import EditarLivroWrapper from './components/EditarLivroWrapper';
+import Login from './components/Login';
 
 class App extends Component {
   state = {
     livros: JSON.parse(localStorage.getItem("livros")) || [],
+    isAuthenticated: false,
   }
 
   inserirLivro = livro => {
@@ -52,13 +54,28 @@ class App extends Component {
     }
   };
 
+  componentDidMount() {
+    this.setState({
+      isAuthenticated: false,
+    })
+  }
+
   render() {
     return (
       <Router>
         <div className='App'>
           <Header />
           <Routes>
-            <Route index element={<TabelaLivros livros={this.state.livros} removerLivro={this.removerLivro}/>} />
+            <Route 
+              index 
+              element={
+                <TabelaLivrosWrapper 
+                  isAuthenticated={this.state.isAuthenticated}
+                  livros={this.state.livros} 
+                  removerLivro={this.removerLivro}
+                />
+              } 
+            />
             <Route path="*" element={<NotFound />} />
             <Route
               path='/cadastrar'
@@ -72,9 +89,15 @@ class App extends Component {
             <Route
               path='/editar/:isbn'
               element={
-                <EditarLivroWrapper editarLivro={this.editarLivro} livros={this.state.livros}
+                <EditarLivroWrapper 
+                  editarLivro={this.editarLivro} 
+                  livros={this.state.livros}
                 />
               }
+            />
+            <Route 
+              path='/login'
+              element={<Login />}
             />
           </Routes>
         </div>

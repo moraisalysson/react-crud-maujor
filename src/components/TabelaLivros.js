@@ -18,7 +18,6 @@ const TabelaLivros = ({ livros, removerLivro }) => {
                         </tr>
                     </thead>
                     <tbody>
-
                         {livros.map(livro =>
                             <tr key={livro.id}>
                                 <td>{livro.isbn}</td>
