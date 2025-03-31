@@ -1,5 +1,5 @@
 import { Component, React } from 'react';
-import Menu from "./components/Menu";
+import Header from "./components/Header";
 import TabelaLivros from "./components/TabelaLivros";
 import NotFound from "./components/NotFound";
 import { Route, BrowserRouter as Router, Routes} from 'react-router-dom';
@@ -56,7 +56,7 @@ class App extends Component {
     return (
       <Router>
         <div className='App'>
-          <Menu />
+          <Header />
           <Routes>
             <Route index element={<TabelaLivros livros={this.state.livros} removerLivro={this.removerLivro}/>} />
             <Route path="*" element={<NotFound />} />

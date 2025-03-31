@@ -13,13 +13,14 @@ body {
 }
 #tudo {
   background: #fff;
-  padding: 10px 20px;
+  padding: 0 20px 20px 20px;
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
 }
 .menu ul {
-  padding: 0;
+  padding: 0 0 0 20px;
+  margin: 0;
 }
 .menu li {
   list-style: none;
@@ -38,7 +39,25 @@ a:hover {
   color: #f3974c;
   text-decoration: none;
 }
-
+.menu {
+  width: calc(100% + 40px);
+  margin-left: -20px;
+  background: #0c0ca2;
+  line-height: 50px;
+}
+.btnLink {
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  background: transparent;
+  color: #ff7300;
+  border: none;
+  text-decoration: underline;
+}
+.btnLink:hover {
+  color: #f3974c;
+  text-decoration: none;
+}
 .tabela {
   border-collapse: collapse;
   border: 1px solid #ccc;
