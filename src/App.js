@@ -8,32 +8,20 @@ import EditarLivroWrapper from './components/EditarLivroWrapper';
 
 class App extends Component {
   state = {
-    livros: [
-      {
-        id: 1,
-        isbn: "978-85-7522-403-8",
-        titulo: "HTML5 - 2ª Edição",
-        autor: "Maurício Samy Silva",
-      },
-      {
-        id: 2,
-        isbn: "978-85-7522-807-4",
-        titulo: "Introdução ao Pentest",
-        autor: "Daniel Moreno",
-      },
-      {
-        id: 3,
-        isbn: "978-85-7522-780-8",
-        titulo: "Internet das Coisas para Desenvolvedores",
-        autor: "Ricardo da Silva Ogliari",
-      },
-    ],
+    livros: JSON.parse(localStorage.getItem("livros")) || [],
   }
 
   inserirLivro = livro => {
-    livro.id = this.state.livros.length + 1;
+    const ultimoId = this.state.livros.at(-1).id;
+
+    livro.id = ultimoId + 1;
+    
+    const livrosAtualizados = [ ...this.state.livros, livro ];
+
+    localStorage.setItem("livros", JSON.stringify(livrosAtualizados));
+
     this.setState({
-      livros: [ ...this.state.livros, livro ]
+      livros: livrosAtualizados
     })
   };
 
@@ -45,6 +33,8 @@ class App extends Component {
 
     const newLivros = [...livros, livro].sort((a, b) => a.id - b.id); //coloca no array livro editado e faz a ordenação
 
+    localStorage.setItem("livros", JSON.stringify(newLivros));
+
     this.setState({
       livros: newLivros
     })
@@ -53,6 +43,9 @@ class App extends Component {
   removerLivro = livro => {
     if(window.confirm("Remover esse livro?")) {
       const livros = this.state.livros.filter(p => p.isbn !== livro.isbn);
+
+      localStorage.setItem("livros", JSON.stringify(livros));
+      
       this.setState({ livros });
     }
   };
