@@ -12,10 +12,12 @@ class App extends Component {
   }
 
   inserirLivro = livro => {
-    const ultimoId = this.state.livros.at(-1).id;
+    if(this.state.livros.length !== 0) {
+      let ultimoId = 0;
+      ultimoId = this.state.livros.at(-1).id;
+      livro.id = ultimoId + 1;
+    } 
 
-    livro.id = ultimoId + 1;
-    
     const livrosAtualizados = [ ...this.state.livros, livro ];
 
     localStorage.setItem("livros", JSON.stringify(livrosAtualizados));
