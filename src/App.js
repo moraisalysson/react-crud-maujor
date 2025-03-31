@@ -50,13 +50,20 @@ class App extends Component {
     })
   };
 
+  removerLivro = livro => {
+    if(window.confirm("Remover esse livro?")) {
+      const livros = this.state.livros.filter(p => p.isbn !== livro.isbn);
+      this.setState({ livros });
+    }
+  };
+
   render() {
     return (
       <Router>
         <div className='App'>
           <Menu />
           <Routes>
-            <Route index element={<TabelaLivros livros={this.state.livros} />} />
+            <Route index element={<TabelaLivros livros={this.state.livros} removerLivro={this.removerLivro}/>} />
             <Route path="*" element={<NotFound />} />
             <Route
               path='/cadastrar'
