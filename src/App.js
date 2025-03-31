@@ -56,7 +56,7 @@ class App extends Component {
 
   componentDidMount() {
     this.setState({
-      isAuthenticated: false,
+      isAuthenticated: true,
     })
   }
 
@@ -64,7 +64,9 @@ class App extends Component {
     return (
       <Router>
         <div className='App'>
-          <Header />
+          <Header 
+            isAuthenticated={this.state.isAuthenticated}
+          />
           <Routes>
             <Route 
               index 
