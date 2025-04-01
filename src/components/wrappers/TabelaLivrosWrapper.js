@@ -1,5 +1,5 @@
-import TableHome from './TableHome';
-import TabelaLivros from './TabelaLivros';
+import TableHome from '../TableHome';
+import TabelaLivros from '../TabelaLivros';
 
 const TabelaLivrosWrapper = props => {  
     return props.isAuthenticated ? 

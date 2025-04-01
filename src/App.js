@@ -1,11 +1,13 @@
 import { Component, React } from 'react';
 import Header from "./components/Header";
-import TabelaLivrosWrapper from "./components/TabelaLivrosWrapper";
+import TabelaLivrosWrapper from "./components/wrappers/TabelaLivrosWrapper";
 import NotFound from "./components/NotFound";
-import { Route, BrowserRouter as Router, Routes} from 'react-router-dom';
-import CadastrarLivros from './components/CadastrarLivro';
-import EditarLivroWrapper from './components/EditarLivroWrapper';
-import Login from './components/Login';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import CadastrarLivrosWrapper from './components/wrappers/CadastrarLivroWrapper';
+import EditarLivroWrapper from './components/wrappers/EditarLivroWrapper';
+import LoginWrapper from './components/wrappers/LoginWrapper';
+import { auth } from './firebase';
+import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
 
 class App extends Component {
   state = {
@@ -14,13 +16,13 @@ class App extends Component {
   }
 
   inserirLivro = livro => {
-    if(this.state.livros.length !== 0) {
+    if (this.state.livros.length !== 0) {
       let ultimoId = 0;
       ultimoId = this.state.livros.at(-1).id;
       livro.id = ultimoId + 1;
-    } 
+    }
 
-    const livrosAtualizados = [ ...this.state.livros, livro ];
+    const livrosAtualizados = [...this.state.livros, livro];
 
     localStorage.setItem("livros", JSON.stringify(livrosAtualizados));
 
@@ -45,61 +47,76 @@ class App extends Component {
   };
 
   removerLivro = livro => {
-    if(window.confirm("Remover esse livro?")) {
+    if (window.confirm("Remover esse livro?")) {
       const livros = this.state.livros.filter(p => p.isbn !== livro.isbn);
 
       localStorage.setItem("livros", JSON.stringify(livros));
-      
+
       this.setState({ livros });
     }
   };
 
-  componentDidMount() {
-    this.setState({
-      isAuthenticated: true,
-    })
+  onLogin = (email, password) => {
+    signInWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        this.setState({ isAuthenticated: true });
+      })
+      .catch((error) => console.log(error));
+  }
+
+  onLogout = () => {
+    signOut(auth)
+      .then(() => {
+        this.setState({ isAuthenticated: false })
+      })
+      .catch((error) => console.log(error));
   }
 
   render() {
     return (
       <Router>
         <div className='App'>
-          <Header 
+          <Header
             isAuthenticated={this.state.isAuthenticated}
+            onLogout={this.onLogout}
           />
           <Routes>
-            <Route 
-              index 
+            <Route
+              index
               element={
-                <TabelaLivrosWrapper 
+                <TabelaLivrosWrapper
                   isAuthenticated={this.state.isAuthenticated}
-                  livros={this.state.livros} 
+                  livros={this.state.livros}
                   removerLivro={this.removerLivro}
                 />
-              } 
+              }
             />
             <Route path="*" element={<NotFound />} />
             <Route
               path='/cadastrar'
               element={
-                <CadastrarLivros
+                <CadastrarLivrosWrapper
                   inserirLivro={this.inserirLivro}
-                  livro={{ id: 0, isbn: "", titulo: "", autor: "" }}
+                  isAuthenticated={this.state.isAuthenticated}
                 />
-            }
+              }
             />
             <Route
               path='/editar/:isbn'
               element={
-                <EditarLivroWrapper 
-                  editarLivro={this.editarLivro} 
+                <EditarLivroWrapper
+                  editarLivro={this.editarLivro}
                   livros={this.state.livros}
+                  isAuthenticated={this.state.isAuthenticated}
                 />
               }
             />
-            <Route 
+            <Route
               path='/login'
-              element={<Login />}
+              element={<LoginWrapper
+                isAuthenticated={this.state.isAuthenticated}
+                onLogin={this.onLogin}
+              />}
             />
           </Routes>
         </div>

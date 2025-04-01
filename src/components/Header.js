@@ -18,7 +18,10 @@ const Header = (props) => {
                     <li>
                         <button
                             className="btnLink" 
-                            onClick={(event) => {}}
+                            onClick={(event) => {
+                                event.preventDefault();
+                                props.onLogout();
+                            }}
                             >Logout
                         </button>
                     </li>
